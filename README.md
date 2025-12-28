@@ -16,7 +16,6 @@ A polished Next.js application for authenticated FHIR medication management. Use
 - [Auth, Roles, and Sync Flow](#auth-roles-and-sync-flow)
 - [Troubleshooting](#troubleshooting)
 - [Scripts](#scripts)
-- [License](#license)
 
 ## Overview
 
@@ -133,7 +132,3 @@ FHIR_BASE_URL=http://localhost:8080/fhir
 - `npm run lint` — ESLint
 - `npm run format` — Prettier write
 - `npm run format:check` — Prettier check
-
-## License
-
-Academic assignment; see repository for details.
