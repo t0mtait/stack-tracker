@@ -1,9 +1,11 @@
 'use client';
 
+import MyNav from '@/components/nav';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button, Card, Spinner, Alert, DarkThemeToggle } from 'flowbite-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import AddToStack from '@/components/addtostack';
 
 
 interface Resource {
@@ -66,28 +68,6 @@ export default function Resources() {
         }
     };
 
-    function handleAdd(resourceId: string) {
-        if (isLoading) {
-            console.log("Auth still loading");
-            return;
-        }
-
-        if (!isAuthenticated || !user || !user.email) {
-            console.error("User not authenticated or missing email");
-            return;
-        }
-        const response = fetch(`/api/stack`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'id': resourceId,
-                'user_email': user.email
-            },
-        });
-        console.log('Add to Stack response:', response);
-
-    }
-
     const fetchResources = async () => {
         try { 
             setLoading(true);
@@ -141,42 +121,7 @@ export default function Resources() {
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
             {/* Header */}
-            <header className="bg-white shadow dark:bg-gray-800">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between items-center">
-                        <div className="flex items-center">
-                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                Resources
-                            </h1>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                            <div className="flex items-center space-x-3">
-                                {user?.picture && (
-                                    <img
-                                        className="h-8 w-8 rounded-full"
-                                        src={user.picture}
-                                        alt={user.name || 'User'}
-                                    />
-                                )}
-                                <span className="text-gray-900 dark:text-white">
-                                    {user?.name || user?.email}
-                                </span>
-                            </div>
-                            <Button 
-                                color="blue" 
-                                onClick={() => router.push('/')}
-                                className="mr-2"
-                            >
-                                Dashboard
-                            </Button>
-                            <Button color="gray" onClick={handleLogout}>
-                                Logout
-                            </Button>
-                            <DarkThemeToggle />
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <MyNav />
 
             {/* Main Content */}
             <main className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
@@ -228,7 +173,19 @@ export default function Resources() {
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                                         >
-                                            Action
+                                            View
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                                        >
+                                            Delete
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                                        >
+                                            Add to Stack
                                         </th>
                                     </tr>
                                 </thead>
@@ -263,25 +220,23 @@ export default function Resources() {
                                                     >
                                                         View
                                                     </a>
-                                                    {' | '}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                                     <a
                                                         onClick={() => handleDelete(resourceData.id)}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
                                                         className="text-red-600 hover:text-blue-900 dark:hover:text-blue-600"
                                                     >
                                                         Delete
                                                     </a>
-                                                    {' | '}
-                                                    <a
-                                                        onClick={() => handleAdd(resourceData.id)}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-green-300 hover:text-blue-900 dark:hover:text-blue-600"
-                                                    >
-                                                        Add to Stack
-                                                    </a>
-                                                </td>                                              
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                                    <div className="cursor-pointer">
+                                                        <AddToStack 
+                                                        resourceId={resourceData.id}
+                                                        supplementName={resourceData.code.text}
+                                                        />
+                                                    </div>
+                                                </td>                                      
                                             </tr>
                                         ))
                                     )}

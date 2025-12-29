@@ -8,7 +8,6 @@ import { useEffect, useState } from 'react';
 interface MedicationStatement {
   id: number;
   supplement: string;
-  
   dosage: { timing: { repeat: { frequency: string; periodUnit: string } } }[];
   medicationReference: { reference: string };
   meta: { lastUpdated: string };
@@ -18,39 +17,65 @@ interface MedicationStatement {
 }
 
 export default function Stack() {
-      const { user, isAuthenticated, isLoading, logout } = useAuth0();
-      const router = useRouter();
-      const [medicationStatements, setMedicationStatements] = useState<MedicationStatement[]>([]);
-      const [error, setError] = useState<string | null>(null);
+  const { user, isAuthenticated, isLoading, logout } = useAuth0();
+  const router = useRouter();
+  const [medicationStatements, setMedicationStatements] = useState<MedicationStatement[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [medicationNames, setMedicationNames] = useState<Record<string, string>>({});
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.push('/');
+    }
+  }, [isAuthenticated, isLoading, router]);
 
   useEffect(() => {
-        if (!isLoading && !isAuthenticated) {
-            router.push('/');
-        }
-    }, [isAuthenticated, isLoading, router]);
+    if (isAuthenticated) {
+      fetchMedicationStatements ();
+    }
+  }, [isAuthenticated]);
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            fetchMedicationStatements ();
-        }
-    }, [isAuthenticated]);
+  const fetchMedicationStatements = async () => {
+    try {
+      const response = await fetch('/api/medicationstatement');
+      const data = await response.json();
 
-    const fetchMedicationStatements = async () => {
+      if (data.success) {
+        const resources: MedicationStatement[] = data.resources;
+        setMedicationStatements(resources);
+
+    
+        const entries = await Promise.all(
+          resources.map(async (med) => {
+            const ref = med.medicationReference.reference; 
+            const name = await getMedicationName(ref);
+            return [ref, name] as const;
+          })
+        );
+
+          setMedicationNames(Object.fromEntries(entries));
+        } else {
+          setError(data.error || 'Failed to fetch users');
+        }
+      } catch (err) {
+        setError('Network error: Unable to fetch users');
+        console.error('Error fetching users:', err);
+      }
+    };
+
+    const getMedicationName = async (reference: string) => {
         try {
-            const response = await fetch('/api/medicationstatement');
-            const data = await response.json();
-            
-            if (data.success) {
-                setMedicationStatements(data.resources);
+            const response = await fetch(`/api/medication?id=${reference}`);
+            const resjson = await response.json();
 
-                console.log("Fetched medication statements:", data.resources);
+            console.log("Medication fetch data:", resjson.resources[0].code.text);
+            if (resjson.success) {
+                return resjson.resources[0].code.text
             } else {
-                setError(data.error || 'Failed to fetch users');
+                return 'Unknown Medication';
             }
         } catch (err) {
-            setError('Network error: Unable to fetch users');
-            console.error('Error fetching users:', err);
-        } finally {
+            console.error('Error fetching medication name:', err);
+            return 'Unknown Medication';
         }
     };
 
@@ -72,11 +97,14 @@ export default function Stack() {
             <TableRow key={medication.id}>
               <TableCell>{medication.id}</TableCell>
               <TableCell>{medication.dosage[0].timing.repeat.frequency} / {medication.dosage[0].timing.repeat.periodUnit.toUpperCase()}</TableCell>
-              <TableCell>{medication.medicationReference.reference}</TableCell>
+              <TableCell>
+                {medicationNames[medication.medicationReference.reference] ?? 'Loading...'}
+              </TableCell>
+
               <TableCell>{new Date(medication.meta.lastUpdated).toLocaleDateString()}</TableCell>
               <TableCell>{medication.status}</TableCell>
               <TableCell>
-                <a href={`/medication/${medication.id}`}>
+                <a href={`http://fhir/MedicationStatement/${medication.id}`}>
                   <Button color="blue" size="sm">View</Button>
                 </a>
               </TableCell>
