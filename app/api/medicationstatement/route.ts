@@ -47,7 +47,6 @@ export async function GET(request: NextRequest) {
 
     const bundle = await resp.json();
     const meds = (bundle.entry ?? []).map((e: any) => e.resource);
-    console.log("resource content", meds);
     return NextResponse.json({
       success: true,
       resources: meds,

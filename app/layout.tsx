@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HAPI FHIR FE | @t0mtait",
-  description: "Frontend for HAPI FHIR server with Auth0 authentication",
+  title: "Stack Tracker",
+  description: "Track and manage your supplement stacks with ease.",
 };
 
 export default function RootLayout({
