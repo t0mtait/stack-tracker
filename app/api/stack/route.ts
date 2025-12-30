@@ -9,14 +9,12 @@ export async function POST(request: NextRequest) {
       dosageValue,
       dosageUnit,
       dosesPerWeek,
-      dosesPerDay,
     } = body as {
       user_email: string;
       id: string;
       dosageValue: string | number;
       dosageUnit: string;
       dosesPerWeek: string | number;
-      dosesPerDay: string | number;
     };
 
     const response = await fetch(

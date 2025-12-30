@@ -34,6 +34,7 @@ export interface Resource {
 export async function GET(request: NextRequest) {
     if (request.headers.get('id') == null) {
         try {
+            console.log("No medication id header set. Fetching list of Medications.");
             const resp = await fetch(`${process.env.FHIR_BASE_URL}/Medication?_count=100`, {
             headers: { Accept: 'application/fhir+json' },
             });
@@ -48,7 +49,6 @@ export async function GET(request: NextRequest) {
 
             const bundle = await resp.json();
             const meds = (bundle.entry ?? []).map((e: any) => e.resource);
-            console.log("resource content", meds);
             return NextResponse.json({
             success: true,
             resources: meds,
@@ -67,8 +67,9 @@ export async function GET(request: NextRequest) {
         }
     }
     else {
-        const id = request.headers.get('id') || '';
+        const id = request.headers.get('id');
         try {
+            console.log("Hitting ", `${process.env.FHIR_BASE_URL}/${id}`);
             const resp = await fetch(`${process.env.FHIR_BASE_URL}/${id}`, {
             headers: { Accept: 'application/fhir+json' },
             });
@@ -81,11 +82,10 @@ export async function GET(request: NextRequest) {
             );
             }
             const medication = await resp.json();
-            const medicationResource = medication.body.object.resources[0];
-            console.log("medication content", medicationResource);
+            console.log("medication content: ", medication);
             return NextResponse.json({
             success: true,
-            body: medicationResource,
+            body: medication,
             });
         } catch (error) {
             const errorMessage = error instanceof Error ? error.message : 'Unknown error';

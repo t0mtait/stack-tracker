@@ -44,7 +44,6 @@ export default function AddToStack({ resourceId, supplementName }: AddToStackPro
     const dosageValue = formData.get('dosesize');
     const dosageUnit = formData.get('dosesizeunit');
     const dosesPerWeek = formData.get('dosesperweek');
-    const dosesPerDay = formData.get('dosesperday');
 
     setLoading(true);
     try {
@@ -56,7 +55,6 @@ export default function AddToStack({ resourceId, supplementName }: AddToStackPro
           dosageValue,
           dosageUnit,
           dosesPerWeek,
-          dosesPerDay,
           user_email: user.email,
         }),
       });
@@ -128,14 +126,7 @@ export default function AddToStack({ resourceId, supplementName }: AddToStackPro
                 required
                 className="mb-3"
               />
-              <TextInput
-                type="number"
-                id="dosesperday"
-                name="dosesperday"
-                placeholder="Doses / day"
-                required
-                className="mb-3"
-              />
+              
 
               {error && <p className="text-sm text-red-500 mb-2">{error}</p>}
 
