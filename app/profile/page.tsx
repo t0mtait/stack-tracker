@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth0 } from '@auth0/auth0-react';
-import { Button, Card, DarkThemeToggle, Spinner } from 'flowbite-react';
+import { Button, Card, DarkThemeToggle, Spinner, TextInput } from 'flowbite-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MyNav from '../../components/nav';
@@ -84,26 +84,25 @@ export default function Dashboard() {
                 <span className="font-medium">Last Updated:</span> {user?.updated_at ? new Date(user.updated_at).toLocaleDateString() : 'N/A'}
               </p>
             <div className="space-y-2">
-              
-              <p className="text-sm text-gray-600 dark:text-white">
-                <span className="font-medium">Email:</span> {user?.email}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-white">
-                <span className="font-medium">Username:</span> {user?.name}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-white">
-                <span className="font-medium">User ID:</span> {user?.sub}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-white">
-                <span className="font-medium">Gender:</span> {user?.gender || 'N/A'}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-white">
-                <span className="font-medium">Name:</span>  {user?.given_name || 'N/A'} {user?.family_name || 'N/A'}
-              </p>
-              <p className="text-sm text-gray-600 dark:text-white">
-                <span className="font-medium">Address:</span>  {user?.address || 'N/A'}
-              </p>
-              
+              <form>
+                <p>Email</p>
+                <TextInput value={user?.email || ''} />
+                <p>Username</p>
+                <TextInput value={user?.name || ''} />
+                <p>Phone Number</p>
+                <TextInput value={user?.phone_number || ''} />
+                <p>User ID</p>
+                <TextInput value={user?.sub || ''} />
+                <p>Gender</p>
+                <TextInput value={user?.gender || ''} />
+                <p>Given Name</p>
+                <TextInput value={user?.given_name || ''} />
+                <p>Family Name</p>
+                <TextInput value={user?.family_name || ''} />
+                <p>Address</p>
+                <TextInput value={user?.address || ''} />
+                <Button type="submit">Save</Button>
+              </form>
             </div>
           </Card>
         </div>  

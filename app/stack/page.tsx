@@ -119,7 +119,11 @@ export default function Stack() {
                 {medicationNames[medication.id] ?? 'Loading...'}
               </TableCell>
               <TableCell>{medication.dosage?.[0]?.doseAndRate?.[0]?.doseQuantity?.value} {medication.dosage?.[0]?.doseAndRate?.[0]?.doseQuantity?.unit}</TableCell>
-              <TableCell>{medication.dosage?.[0]?.timing?.repeat?.frequency} / {medication.dosage?.[0]?.timing?.repeat?.periodUnit?.toUpperCase()}</TableCell>
+              <TableCell>
+                {medication.dosage?.[0]?.timing?.repeat?.frequency == '7' && medication.dosage?.[0]?.timing?.repeat?.periodUnit?.toUpperCase() === 'WK'
+                  ? 'Daily'
+                  : `${medication.dosage?.[0]?.timing?.repeat?.frequency} / ${medication.dosage?.[0]?.timing?.repeat?.periodUnit?.toUpperCase()}`}
+              </TableCell>
               <TableCell>{new Date(medication.meta.lastUpdated).toLocaleDateString()}</TableCell>
               <TableCell>{medication.status}</TableCell>
               <TableCell>

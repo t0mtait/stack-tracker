@@ -1,18 +1,15 @@
 import { ThemeModeScript } from "flowbite-react";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Poppins } from "next/font/google";
 import { ThemeInit } from "../.flowbite-react/init";
 import Auth0ProviderWrapper from "../components/Auth0ProviderWrapper";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
+  weight: ["500", "800"],
 });
 
 export const metadata: Metadata = {
@@ -31,7 +28,7 @@ export default function RootLayout({
         <ThemeModeScript />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${poppins.variable} antialiased`}
       >
         <ThemeInit />
         <Auth0ProviderWrapper>
