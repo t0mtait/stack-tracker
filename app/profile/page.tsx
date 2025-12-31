@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth0 } from '@auth0/auth0-react';
-import { Button, Card, DarkThemeToggle, Spinner, TextInput } from 'flowbite-react';
+import { Button, Card, DarkThemeToggle, Spinner, TextInput, FileInput, Label} from 'flowbite-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MyNav from '../../components/nav';
@@ -85,23 +85,25 @@ export default function Dashboard() {
               </p>
             <div className="space-y-2">
               <form>
-                <p>Email</p>
-                <TextInput value={user?.email || ''} />
-                <p>Username</p>
-                <TextInput value={user?.name || ''} />
-                <p>Phone Number</p>
-                <TextInput value={user?.phone_number || ''} />
-                <p>User ID</p>
-                <TextInput value={user?.sub || ''} />
-                <p>Gender</p>
-                <TextInput value={user?.gender || ''} />
-                <p>Given Name</p>
-                <TextInput value={user?.given_name || ''} />
-                <p>Family Name</p>
-                <TextInput value={user?.family_name || ''} />
-                <p>Address</p>
-                <TextInput value={user?.address || ''} />
-                <Button type="submit">Save</Button>
+                <Label htmlFor="picture">Profile Picture</Label>
+                <FileInput id="picture" />
+                <Label htmlFor="email">Email</Label>
+                <TextInput id="email" value={user?.email || ''} />
+                <Label htmlFor="username">Username</Label>
+                <TextInput id="username" value={user?.name || ''} />
+                <Label htmlFor="phone">Phone Number</Label>
+                <TextInput id="phone" value={user?.phone_number || ''} />
+                <Label htmlFor="userid">User ID</Label>
+                <TextInput id="userid" value={user?.sub || ''} />
+                <Label htmlFor="gender">Gender</Label>
+                <TextInput id="gender" value={user?.gender || ''} />
+                <Label htmlFor="givenname">Given Name</Label>
+                <TextInput id="givenname" value={user?.given_name || ''} />
+                <Label htmlFor="familyname">Family Name</Label>
+                <TextInput id="familyname" value={user?.family_name || ''} />
+                <Label htmlFor="address">Address</Label>
+                <TextInput id="address" value={user?.address || ''} />
+                <Button className="mt-5 cursor-pointer" type="submit">Save</Button>
               </form>
             </div>
           </Card>

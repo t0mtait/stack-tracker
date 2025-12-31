@@ -99,7 +99,7 @@ export default function Stack() {
 
   return (
     <div className="overflow-x-auto py-8">
-      <Table>
+      <Table className="text-black dark:text-white">
         <TableHead>
           <TableRow>
             <TableHeadCell>Statement ID</TableHeadCell>
@@ -107,8 +107,8 @@ export default function Stack() {
             <TableHeadCell>Dose</TableHeadCell>
             <TableHeadCell>Frequency</TableHeadCell>
             <TableHeadCell>Last Updated</TableHeadCell>
-            <TableHeadCell>Status</TableHeadCell>
-            <TableHeadCell>Actions</TableHeadCell>
+            <TableHeadCell>View</TableHeadCell>
+            <TableHeadCell>View</TableHeadCell>
           </TableRow>
         </TableHead>
         <TableBody className="divide-y">
@@ -125,17 +125,21 @@ export default function Stack() {
                   : `${medication.dosage?.[0]?.timing?.repeat?.frequency} / ${medication.dosage?.[0]?.timing?.repeat?.periodUnit?.toUpperCase()}`}
               </TableCell>
               <TableCell>{new Date(medication.meta.lastUpdated).toLocaleDateString()}</TableCell>
-              <TableCell>{medication.status}</TableCell>
               <TableCell>
                 <a href={`http://localhost:8080/fhir/MedicationStatement/${medication.id}`}>
-                  <Button color="blue" size="sm">View</Button>
+                  <Button className="cursor-pointer" color="blue" size="sm">View</Button>
                 </a>
+              </TableCell>
+              <TableCell>
+                <Button className="cursor-pointer bg-red-600" size="sm" onClick={ () => {
+                  router.push(`/stack/delete/${medication.id}`);
+                }}>Delete</Button>
               </TableCell>
             </TableRow>
           ))}
           {error && (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={7}>
                 <Alert color="failure">{error}</Alert>
               </TableCell>
             </TableRow>

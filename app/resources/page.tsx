@@ -142,7 +142,7 @@ export default function Resources() {
                         </div>
                     ) : (
                         <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <table className="min-w-full text-black dark:text-white divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
                                         <th
@@ -163,12 +163,7 @@ export default function Resources() {
                                         >
                                             Last updated
                                         </th>
-                                        <th
-                                            scope="col"
-                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                        >
-                                            published
-                                        </th>
+                                        
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
@@ -209,25 +204,23 @@ export default function Resources() {
                                                     {formatDate(resourceData.meta.lastUpdated)}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                    {resourceData.status}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                    <a
+                                                    <Button
+                                                        size="sm"
                                                         href={`http://localhost:8080/fhir/Medication/${resourceData.id}`}
-                                                        target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-600"
+                                                        className="cursor-pointer"
                                                     >
                                                         View
-                                                    </a>
+                                                    </Button>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                    <a
+                                                    <Button
+                                                        className="cursor-pointer text-red-600"
+                                                        size="sm"
                                                         onClick={() => handleDelete(resourceData.id)}
-                                                        className="text-red-600 hover:text-blue-900 dark:hover:text-blue-600"
                                                     >
                                                         Delete
-                                                    </a>
+                                                    </Button>
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                                     <div className="cursor-pointer">

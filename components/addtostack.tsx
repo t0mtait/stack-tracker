@@ -87,8 +87,10 @@ export default function AddToStack({ resourceId, supplementName }: AddToStackPro
   return (
     <>
       <Button
+        size="sm"
         onClick={() => setOpen(true)}
         disabled={isLoading || !isAuthenticated}
+        className="cursor-pointer bg-green-600"
       >Add to stack</Button>
 
       <Modal show={open} size="md" onClose={() => setOpen(false)} popup>
@@ -130,7 +132,7 @@ export default function AddToStack({ resourceId, supplementName }: AddToStackPro
 
               {error && <p className="text-sm text-red-500 mb-2">{error}</p>}
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full cursor-pointer" disabled={loading}>
                 Add to Stack
               </Button>
             </form>
