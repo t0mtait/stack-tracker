@@ -86,12 +86,10 @@ export default function AddToStack({ resourceId, supplementName }: AddToStackPro
 
   return (
     <>
-      <Button
-        size="sm"
+      <a
         onClick={() => setOpen(true)}
-        disabled={isLoading || !isAuthenticated}
-        className="cursor-pointer bg-green-600"
-      >Add to stack</Button>
+        className="cursor-pointer text-blue-600 underline"
+      >Add</a>
 
       <Modal show={open} size="md" onClose={() => setOpen(false)} popup>
         <ModalHeader />

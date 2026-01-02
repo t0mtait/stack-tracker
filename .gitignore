@@ -19,6 +19,7 @@
 .DS_Store
 *.pem
 /hapi.postgres
+hapi.postgres
 
 # debug
 npm-debug.log*

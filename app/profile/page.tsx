@@ -73,20 +73,20 @@ export default function Dashboard() {
         <MyNav />
 
       {/* Main Content */}
-      <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-l px-4 py-8 sm:px-6 lg:px-8">
         {/* User Info Section */}
         <div className="mt-8">
           <Card>
             <p className="text-2xl font-medium text-gray-900 dark:text-white">
               Account Information
             </p>
-            <p className="text-sm text-gray-600 dark:text-white mb-2">
+            <p className="text-sm text-black dark:text-white mb-2">
                 <span className="font-medium">Last Updated:</span> {user?.updated_at ? new Date(user.updated_at).toLocaleDateString() : 'N/A'}
               </p>
             <div className="space-y-2">
               <form>
                 <Label htmlFor="picture">Profile Picture</Label>
-                <FileInput id="picture" />
+                <TextInput id="pictureurl" value={user?.picture || ''} />
                 <Label htmlFor="email">Email</Label>
                 <TextInput id="email" value={user?.email || ''} />
                 <Label htmlFor="username">Username</Label>
@@ -103,7 +103,7 @@ export default function Dashboard() {
                 <TextInput id="familyname" value={user?.family_name || ''} />
                 <Label htmlFor="address">Address</Label>
                 <TextInput id="address" value={user?.address || ''} />
-                <Button className="mt-5 cursor-pointer" type="submit">Save</Button>
+                <Button className="mt-5 w-full cursor-pointer" type="submit">Save</Button>
               </form>
             </div>
           </Card>

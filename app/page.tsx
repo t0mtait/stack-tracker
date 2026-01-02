@@ -30,7 +30,7 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-white px-4 py-24 dark:bg-gray-900">
+    <main className='antialiased flex min-h-screen flex-col items-center justify-center bg-white px-4 py-24 dark:bg-gray-900'>
       <div className="text-center max-w-md">
         <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
           HAPI FHIR Frontend

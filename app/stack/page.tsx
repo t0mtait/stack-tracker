@@ -107,8 +107,7 @@ export default function Stack() {
             <TableHeadCell>Dose</TableHeadCell>
             <TableHeadCell>Frequency</TableHeadCell>
             <TableHeadCell>Last Updated</TableHeadCell>
-            <TableHeadCell>View</TableHeadCell>
-            <TableHeadCell>View</TableHeadCell>
+            <TableHeadCell>Actions</TableHeadCell>
           </TableRow>
         </TableHead>
         <TableBody className="divide-y">
@@ -126,15 +125,15 @@ export default function Stack() {
               </TableCell>
               <TableCell>{new Date(medication.meta.lastUpdated).toLocaleDateString()}</TableCell>
               <TableCell>
-                <a href={`http://localhost:8080/fhir/MedicationStatement/${medication.id}`}>
-                  <Button className="cursor-pointer" color="blue" size="sm">View</Button>
-                </a>
-              </TableCell>
-              <TableCell>
-                <Button className="cursor-pointer bg-red-600" size="sm" onClick={ () => {
+                <div className="flex flex-row gap-3">
+                  <a href={`http://localhost:8080/fhir/MedicationStatement/${medication.id}`} className="cursor-pointer text-blue-600 underline">View</a>
+                  <a className="cursor-pointer text-red-600 underline" onClick={ () => {
                   router.push(`/stack/delete/${medication.id}`);
-                }}>Delete</Button>
-              </TableCell>
+                }}>Delete</a>
+                </div>
+                  
+                  
+              </TableCell>        
             </TableRow>
           ))}
           {error && (

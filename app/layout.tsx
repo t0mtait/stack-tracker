@@ -7,34 +7,21 @@ import "./globals.css";
 
 
 const poppins = Poppins({
-  variable: "--font-poppins",
   subsets: ["latin"],
   weight: ["500", "800"],
 });
 
-export const metadata: Metadata = {
-  title: "Stack Tracker",
-  description: "Track and manage your supplement stacks with ease.",
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning className={poppins.className}>
       <head>
         <ThemeModeScript />
       </head>
-      <body
-        className={`${poppins.variable} antialiased`}
-      >
-        <ThemeInit />
-        <Auth0ProviderWrapper>
-          {children}
-        </Auth0ProviderWrapper>
+      <body className={`${poppins.className} antialiased`}>
+                <ThemeInit />
+        <Auth0ProviderWrapper>{children}</Auth0ProviderWrapper>
       </body>
     </html>
   );
 }
+
