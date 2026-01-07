@@ -3,13 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 export async function PATCH(req: NextRequest) {
   const { userId, data } = await req.json(); 
 
-  const tokenRes = await fetch(`https://YOUR_DOMAIN/oauth/token`, {
+  const tokenRes = await fetch(`https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/oauth/token`, {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
-      client_id: process.env.AUTH0_M2M_CLIENT_ID,
-      client_secret: process.env.AUTH0_M2M_CLIENT_SECRET,
-      audience: `https://YOUR_DOMAIN/api/v2/`,
+      client_id: process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID,
+      client_secret: process.env.AUTH0_CLIENT_SECRET,
+      audience: `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/`,
       grant_type: "client_credentials",
     }),
   });
@@ -17,7 +17,7 @@ export async function PATCH(req: NextRequest) {
 
   // 2. PATCH user
   const patchRes = await fetch(
-    `https://YOUR_DOMAIN/api/v2/users/${encodeURIComponent(userId)}`,
+    `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${encodeURIComponent(userId)}`,
     {
       method: "PATCH",
       headers: {
