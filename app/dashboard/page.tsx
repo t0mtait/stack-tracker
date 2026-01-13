@@ -31,6 +31,7 @@ export default function Dashboard() {
           // Check if roles is an array or needs parsing
           const rolesArray = Array.isArray(userRoles) ? userRoles : JSON.parse(userRoles || '[]');
           setIsAdmin(rolesArray.includes('admin'));
+          
         }
       } catch (error) {
         console.error('Error fetching user roles:', error);

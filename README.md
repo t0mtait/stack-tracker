@@ -1,9 +1,11 @@
-# Stack Tracker (HAPI FHIR Frontend) 💊🚀
+# Stack Tracker 💊🚀
+
+![dashboard screenshot](image-1.png)
 
 A polished Next.js application for authenticated FHIR medication management. Users sign in with Auth0, are mirrored into PostgreSQL and HAPI FHIR (Patient resources), can browse Medications, add them to a personal medication stack (MedicationStatements), and create/delete resources. The repo ships with Docker Compose for a one-command spin-up of the full stack (web + HAPI FHIR + Postgres).
 
 ## Table of Contents
-- [Stack Tracker (HAPI FHIR Frontend) 💊🚀](#stack-tracker-hapi-fhir-frontend-)
+- [Stack Tracker 💊🚀](#stack-tracker-hapi-fhir-frontend-)
 - [Overview](#overview)
 - [Architecture & Containers](#architecture--containers)
 - [Features](#features)
@@ -16,7 +18,6 @@ A polished Next.js application for authenticated FHIR medication management. Use
 - [Auth, Roles, and Sync Flow](#auth-roles-and-sync-flow)
 - [Troubleshooting](#troubleshooting)
 - [Scripts](#scripts)
-- [License](#license)
 
 ## Overview
 
@@ -133,7 +134,3 @@ FHIR_BASE_URL=http://localhost:8080/fhir
 - `npm run lint` — ESLint
 - `npm run format` — Prettier write
 - `npm run format:check` — Prettier check
-
-## License
-
-Academic assignment; see repository for details.

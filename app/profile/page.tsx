@@ -11,6 +11,35 @@ export default function Dashboard() {
   const [isAdmin, setIsAdmin] = useState(false);
   const [loadingRoles, setLoadingRoles] = useState(true);
 
+  const [form, setForm] = useState({
+  picture: user?.picture || '',
+  email: user?.email || '',
+  username: user?.name || '',
+  phone: user?.phone_number || '',
+  userid: user?.sub || '',
+  gender: user?.gender || '',
+  givenname: user?.given_name || '',
+  familyname: user?.family_name || '',
+  address: user?.address || '',
+});
+
+  useEffect(() => {
+  if (user) {
+    setForm({
+      picture: user.picture || '',
+      email: user.email || '',
+      username: user.name || '',
+      phone: user.phone_number || '',
+      userid: user.sub || '',
+      gender: user.gender || '',
+      givenname: user.given_name || '',
+      familyname: user.family_name || '',
+      address: user.address || '',
+    });
+  }
+}, [user]);
+
+
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
       router.push('/');
@@ -53,63 +82,34 @@ export default function Dashboard() {
     });
   };
 
-  const [formValues, setFormValues] = useState({
-  pictureurl: '',
-  email: '',
-  username: '',
-  phone: '',
-  givenname: '',
-  familyname: '',
-});
-
-useEffect(() => {
-  if (user) {
-    setFormValues({
-      pictureurl: user.picture || '',
-      email: user.email || '',
-      username: user.name || '',
-      phone: user.phone_number || '',
-      givenname: user.given_name || '',
-      familyname: user.family_name || '',
-    });
-  }
-}, [user]);
-
-const handleChange =
-  (field: keyof typeof formValues) =>
-  (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormValues(prev => ({ ...prev, [field]: e.target.value }));
-  };
-
-
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    const formData = new FormData(form);
-    const data: any = {};
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-    
+  e.preventDefault();
+  console.log("Submitting user update form!");
+  
+  try {
     const response = await fetch('/api/auth0_user', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-  userId: user?.sub,
-  data: formValues,
-}),
-  
+      body: JSON.stringify(form),
     });
     
-    const result = await response.json();
-    if (result.success) {
-      alert('Profile updated successfully!');
+    const data = await response.json();
+    
+    if (response.ok) {
+      alert('Profile updated successfully');
     } else {
-      alert('Error updating profile: ' + JSON.stringify(result.error));
+      alert('Failed to update profile');
+      console.error(data);
     }
-  };
+  } catch (err) {
+    console.error('Fetch error:', err);
+    alert('Network error updating profile');
+  }
+};
+
+
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
@@ -142,49 +142,27 @@ const handleChange =
               </p>
             <div className="space-y-2">
               <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                <Label htmlFor="pictureurl">Picture URL</Label>
+                <Label htmlFor="picture">Profile Picture</Label>
+                <TextInput id="picture" value={form.picture} onChange={e => setForm(f => ({ ...f, picture: e.target.value }))} />
+                <Label htmlFor="email">Email</Label>
                 <TextInput
-  id="pictureurl"
-  value={formValues.pictureurl}
-  onChange={handleChange('pictureurl')}
-/>
-
-<Label htmlFor="email">Email</Label>
-<TextInput
-  id="email"
-  value={formValues.email}
-  onChange={handleChange('email')}
-/>
-
-<Label htmlFor="username">Username</Label>
-<TextInput
-  id="username"
-  value={formValues.username}
-  onChange={handleChange('username')}
-/>
-
-<Label htmlFor="phone">Phone Number</Label>
-<TextInput
-  id="phone"
-  value={formValues.phone}
-  onChange={handleChange('phone')}
-/>
-
-<Label htmlFor="givenname">Given Name</Label>
-<TextInput
-  id="givenname"
-  value={formValues.givenname}
-  onChange={handleChange('givenname')}
-/>
-
-<Label htmlFor="familyname">Family Name</Label>
-<TextInput
-  id="familyname"
-  value={formValues.familyname}
-  onChange={handleChange('familyname')}
-/>
-
-                
+                  disabled
+                  id="email"
+                  value={form.email}
+                  onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+                />
+                <Label htmlFor="username">Username</Label>
+                <TextInput id="username" value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value }))} />
+                <Label htmlFor="userid">User ID</Label>
+                <TextInput id="userid" value={form.userid} onChange={e => setForm(f => ({ ...f, userid: e.target.value }))} />
+                <Label htmlFor="gender">Gender</Label>
+                <TextInput id="gender" value={form.gender} onChange={e => setForm(f => ({ ...f, gender: e.target.value }))} />
+                <Label htmlFor="givenname">Given Name</Label>
+                <TextInput id="givenname" value={form.givenname} onChange={e => setForm(f => ({ ...f, givenname: e.target.value }))} />
+                <Label htmlFor="familyname">Family Name</Label>
+                <TextInput id="familyname" value={form.familyname} onChange={e => setForm(f => ({ ...f, familyname: e.target.value }))} />
+                <Label htmlFor="address">Address</Label>
+                <TextInput id="address" value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} />
                 <Button className="mt-5 w-full cursor-pointer" type="submit">Save</Button>
               </form>
             </div>
