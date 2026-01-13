@@ -1,38 +1,101 @@
-import { NextRequest, NextResponse } from "next/server";
+// app/api/auth0_user/route.ts
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function PATCH(req: NextRequest) {
-  const { userId, data } = await req.json(); 
+  try {
+    const body = await req.json();
+    console.log('[auth0_user] Incoming body:', body);
 
-  const tokenRes = await fetch(`https://YOUR_DOMAIN/oauth/token`, {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify({
-      client_id: process.env.AUTH0_M2M_CLIENT_ID,
-      client_secret: process.env.AUTH0_M2M_CLIENT_SECRET,
-      audience: `https://YOUR_DOMAIN/api/v2/`,
-      grant_type: "client_credentials",
-    }),
-  });
-  const { access_token } = await tokenRes.json();
+    const {
+      email,
+      username,
+      phone,
+      userid,
+      gender,
+      givenname,
+      familyname,
+      address,
+      pictureurl,
+    } = body;
 
-  // 2. PATCH user
-  const patchRes = await fetch(
-    `https://YOUR_DOMAIN/api/v2/users/${encodeURIComponent(userId)}`,
-    {
-      method: "PATCH",
-      headers: {
-        "content-type": "application/json",
-        authorization: `Bearer ${access_token}`,
-      },
-      body: JSON.stringify(data),
+    // Get a Management API token (client credentials flow)
+    console.log('[auth0_user] Requesting management token for user:', userid);
+
+    const tokenRes = await fetch(
+      `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/oauth/token`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_id: process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID,
+          client_secret: process.env.AUTH0_CLIENT_SECRET,
+          audience: `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/`,
+          grant_type: 'client_credentials',
+        }),
+      }
+    );
+
+    console.log('[auth0_user] Token response status:', tokenRes.status);
+
+    if (!tokenRes.ok) {
+      const errorBody = await tokenRes.text();
+      console.error('[auth0_user] Failed to get management token:', errorBody);
+      return NextResponse.json(
+        { error: 'Failed to get management token' },
+        { status: 500 }
+      );
     }
-  );
 
-  if (!patchRes.ok) {
-    const err = await patchRes.json().catch(() => ({}));
-    return NextResponse.json({ success: false, error: err }, { status: 500 });
+    const { access_token } = await tokenRes.json();
+    console.log('[auth0_user] Got management token');
+
+    const patchBody: any = {
+      email,
+      given_name: givenname,
+      family_name: familyname,
+      picture: pictureurl,
+      user_metadata: {
+        gender,
+        address,
+        display_name: username, 
+      },
+  };
+
+    Object.keys(patchBody).forEach((k) => {
+      if (patchBody[k] === undefined) delete patchBody[k];
+    });
+
+    console.log('[auth0_user] Patch body to Auth0:', patchBody);
+
+    const userRes = await fetch(
+      `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/users/${encodeURIComponent(
+        userid
+      )}`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${access_token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(patchBody),
+      }
+    );
+
+    console.log('[auth0_user] User patch status:', userRes.status);
+
+    const data = await userRes.json();
+    console.log('[auth0_user] User patch response body:', data);
+
+    if (!userRes.ok) {
+      return NextResponse.json(data, { status: userRes.status });
+    }
+
+    return NextResponse.json(data, { status: 200 });
+  } catch (err) {
+    console.error('[auth0_user] Unexpected server error:', err);
+    return NextResponse.json(
+      { error: 'Unexpected server error' },
+      { status: 500 }
+    );
   }
-
-  const updatedUser = await patchRes.json();
-  return NextResponse.json({ success: true, user: updatedUser });
 }
