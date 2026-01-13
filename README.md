@@ -1,5 +1,7 @@
 # Stack Tracker 💊🚀
 
+![dashboard screenshot](image-1.png)
+
 A polished Next.js application for authenticated FHIR medication management. Users sign in with Auth0, are mirrored into PostgreSQL and HAPI FHIR (Patient resources), can browse Medications, add them to a personal medication stack (MedicationStatements), and create/delete resources. The repo ships with Docker Compose for a one-command spin-up of the full stack (web + HAPI FHIR + Postgres).
 
 ## Table of Contents

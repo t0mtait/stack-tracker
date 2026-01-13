@@ -142,7 +142,7 @@ export default function Resources() {
                         </div>
                     ) : (
                         <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <table className="min-w-full text-black dark:text-white divide-y divide-gray-200 dark:divide-gray-700">
                                 <thead className="bg-gray-50 dark:bg-gray-700">
                                     <tr>
                                         <th
@@ -163,30 +163,14 @@ export default function Resources() {
                                         >
                                             Last updated
                                         </th>
+                                        
                                         <th
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                                         >
-                                            published
+                                            Actions
                                         </th>
-                                        <th
-                                            scope="col"
-                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                        >
-                                            View
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                        >
-                                            Delete
-                                        </th>
-                                        <th
-                                            scope="col"
-                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
-                                        >
-                                            Add to Stack
-                                        </th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
@@ -209,33 +193,28 @@ export default function Resources() {
                                                     {formatDate(resourceData.meta.lastUpdated)}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                    {resourceData.status}
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                    <a
-                                                        href={`http://fhir:8080/fhir/Medication/${resourceData.id}`}
-                                                        target="_blank"
-                                                        rel="noopener noreferrer"
-                                                        className="text-blue-600 hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-600"
-                                                    >
+                                                    <div className="flex flex-row gap-3">
+                                                        <a
+                                                            href={`http://localhost:8080/fhir/Medication/${resourceData.id}`}
+                                                            rel="noopener noreferrer"
+                                                            className="cursor-pointer text-blue-600 underline"
+                                                        >
                                                         View
-                                                    </a>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                    <a
-                                                        onClick={() => handleDelete(resourceData.id)}
-                                                        className="text-red-600 hover:text-blue-900 dark:hover:text-blue-600"
-                                                    >
+                                                        </a>
+                                                        <a
+                                                            className="cursor-pointer text-red-600 underline"
+                                                            onClick={() => handleDelete(resourceData.id)}
+                                                        >
                                                         Delete
-                                                    </a>
-                                                </td>
-                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
-                                                    <div className="cursor-pointer">
-                                                        <AddToStack 
-                                                        resourceId={resourceData.id}
-                                                        supplementName={resourceData.code.text}
-                                                        />
+                                                        </a>
+                                                        <div className="cursor-pointer">
+                                                            <AddToStack 
+                                                            resourceId={resourceData.id}
+                                                            supplementName={resourceData.code.text}
+                                                            />
+                                                        </div>
                                                     </div>
+                                                        
                                                 </td>                                      
                                             </tr>
                                         ))

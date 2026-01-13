@@ -99,7 +99,7 @@ export default function Stack() {
 
   return (
     <div className="overflow-x-auto py-8">
-      <Table>
+      <Table className="text-black dark:text-white">
         <TableHead>
           <TableRow>
             <TableHeadCell>Statement ID</TableHeadCell>
@@ -107,7 +107,6 @@ export default function Stack() {
             <TableHeadCell>Dose</TableHeadCell>
             <TableHeadCell>Frequency</TableHeadCell>
             <TableHeadCell>Last Updated</TableHeadCell>
-            <TableHeadCell>Status</TableHeadCell>
             <TableHeadCell>Actions</TableHeadCell>
           </TableRow>
         </TableHead>
@@ -119,19 +118,27 @@ export default function Stack() {
                 {medicationNames[medication.id] ?? 'Loading...'}
               </TableCell>
               <TableCell>{medication.dosage?.[0]?.doseAndRate?.[0]?.doseQuantity?.value} {medication.dosage?.[0]?.doseAndRate?.[0]?.doseQuantity?.unit}</TableCell>
-              <TableCell>{medication.dosage?.[0]?.timing?.repeat?.frequency} / {medication.dosage?.[0]?.timing?.repeat?.periodUnit?.toUpperCase()}</TableCell>
-              <TableCell>{new Date(medication.meta.lastUpdated).toLocaleDateString()}</TableCell>
-              <TableCell>{medication.status}</TableCell>
               <TableCell>
-                <a href={`http://localhost:8080/fhir/MedicationStatement/${medication.id}`}>
-                  <Button color="blue" size="sm">View</Button>
-                </a>
+                {medication.dosage?.[0]?.timing?.repeat?.frequency == '7' && medication.dosage?.[0]?.timing?.repeat?.periodUnit?.toUpperCase() === 'WK'
+                  ? 'Daily'
+                  : `${medication.dosage?.[0]?.timing?.repeat?.frequency} / ${medication.dosage?.[0]?.timing?.repeat?.periodUnit?.toUpperCase()}`}
               </TableCell>
+              <TableCell>{new Date(medication.meta.lastUpdated).toLocaleDateString()}</TableCell>
+              <TableCell>
+                <div className="flex flex-row gap-3">
+                  <a href={`http://localhost:8080/fhir/MedicationStatement/${medication.id}`} className="cursor-pointer text-blue-600 underline">View</a>
+                  <a className="cursor-pointer text-red-600 underline" onClick={ () => {
+                  router.push(`/stack/delete/${medication.id}`);
+                }}>Delete</a>
+                </div>
+                  
+                  
+              </TableCell>        
             </TableRow>
           ))}
           {error && (
             <TableRow>
-              <TableCell colSpan={5}>
+              <TableCell colSpan={7}>
                 <Alert color="failure">{error}</Alert>
               </TableCell>
             </TableRow>
