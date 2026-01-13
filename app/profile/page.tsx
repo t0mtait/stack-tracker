@@ -130,7 +130,7 @@ export default function Dashboard() {
         <MyNav />
 
       {/* Main Content */}
-      <main className="mx-auto max-w-l px-4 py-8 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-lg px-4 py-8 sm:px-6 lg:px-8">
         {/* User Info Section */}
         <div className="mt-8">
           <Card>

@@ -18,7 +18,6 @@ export async function PATCH(req: NextRequest) {
       pictureurl,
     } = body;
 
-    // Get a Management API token (client credentials flow)
     console.log('[auth0_user] Requesting management token for user:', userid);
 
     const tokenRes = await fetch(
