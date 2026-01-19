@@ -26,7 +26,7 @@ export default function MyNav() {
                     <div className="flex items-center">
 
                     {/*  home icon */}
-                    <img onClick={ () => router.push('/dashboard')} className="h-10 w-10 mr-3 cursor-pointer text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400" src="../public/home-icon.png" />
+                    <img onClick={ () => router.push('/dashboard')} className="h-10 w-10 mr-3 cursor-pointer text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400" src="public/home.svg" />
                     
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                         Stack Tracker

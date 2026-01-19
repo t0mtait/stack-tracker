@@ -6,39 +6,54 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MyNav from '../../components/nav';
 export default function Dashboard() {
-  const { user, isAuthenticated, isLoading, logout } = useAuth0();
+  const { user, isAuthenticated, isLoading, logout, getAccessTokenSilently } = useAuth0();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [loadingRoles, setLoadingRoles] = useState(true);
 
   const [form, setForm] = useState({
-  picture: user?.picture || '',
-  email: user?.email || '',
-  username: user?.name || '',
-  phone: user?.phone_number || '',
-  userid: user?.sub || '',
-  gender: user?.gender || '',
-  givenname: user?.given_name || '',
-  familyname: user?.family_name || '',
-  address: user?.address || '',
-});
+    picture: '',
+    email: '',
+    username: '',
+    phone: '',
+    userid: '',
+    gender: '',
+    givenname: '',
+    familyname: '',
+    address: '',
+  })
 
-  useEffect(() => {
-  if (user) {
-    setForm({
-      picture: user.picture || '',
-      email: user.email || '',
-      username: user.name || '',
-      phone: user.phone_number || '',
-      userid: user.sub || '',
-      gender: user.gender || '',
-      givenname: user.given_name || '',
-      familyname: user.family_name || '',
-      address: user.address || '',
-    });
-  }
-}, [user]);
 
+
+useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const res = await fetch(`https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/userinfo`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const profile = await res.json();
+        console.log('[Dashboard] /userinfo profile:', profile);
+
+        setForm({
+          picture: profile.picture || '',
+          email: profile.email || '',
+          username: profile.user_metadata?.display_name || profile.name || '',
+          phone: profile.user_metadata?.phone || '',
+          userid: profile.sub || '',
+          gender: profile.user_metadata.gender || '',
+          givenname: profile.given_name || '',
+          familyname: profile.family_name || '',
+          address: profile.user_metadata.address || '',
+        });
+      } catch (e) {
+        console.error('Failed to load profile from /userinfo', e);
+      }
+    };
+    if (!isLoading && isAuthenticated) {
+      loadProfile();
+    }
+  }, [isAuthenticated, isLoading, getAccessTokenSilently]);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -99,6 +114,7 @@ export default function Dashboard() {
     
     if (response.ok) {
       alert('Profile updated successfully');
+      window.location.reload(); 
     } else {
       alert('Failed to update profile');
       console.error(data);
