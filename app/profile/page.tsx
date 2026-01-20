@@ -15,12 +15,9 @@ export default function Dashboard() {
     picture: '',
     email: '',
     username: '',
-    phone: '',
     userid: '',
-    gender: '',
     givenname: '',
     familyname: '',
-    address: '',
   })
 
 
@@ -38,13 +35,10 @@ useEffect(() => {
         setForm({
           picture: profile.picture || '',
           email: profile.email || '',
-          username: profile.user_metadata?.display_name || profile.name || '',
-          phone: profile.user_metadata?.phone || '',
+          username: profile.nickname ||  '',
           userid: profile.sub || '',
-          gender: profile.user_metadata.gender || '',
           givenname: profile.given_name || '',
           familyname: profile.family_name || '',
-          address: profile.user_metadata.address || '',
         });
       } catch (e) {
         console.error('Failed to load profile from /userinfo', e);
@@ -171,14 +165,10 @@ useEffect(() => {
                 <TextInput id="username" value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value }))} />
                 <Label htmlFor="userid">User ID</Label>
                 <TextInput id="userid" value={form.userid} onChange={e => setForm(f => ({ ...f, userid: e.target.value }))} />
-                <Label htmlFor="gender">Gender</Label>
-                <TextInput id="gender" value={form.gender} onChange={e => setForm(f => ({ ...f, gender: e.target.value }))} />
                 <Label htmlFor="givenname">Given Name</Label>
                 <TextInput id="givenname" value={form.givenname} onChange={e => setForm(f => ({ ...f, givenname: e.target.value }))} />
                 <Label htmlFor="familyname">Family Name</Label>
                 <TextInput id="familyname" value={form.familyname} onChange={e => setForm(f => ({ ...f, familyname: e.target.value }))} />
-                <Label htmlFor="address">Address</Label>
-                <TextInput id="address" value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} />
                 <Button className="mt-5 w-full cursor-pointer" type="submit">Save</Button>
               </form>
             </div>

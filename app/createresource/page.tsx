@@ -1,7 +1,7 @@
 'use client';
 
 import { useAuth0 } from '@auth0/auth0-react';
-import { Button, TextInput, Label, Checkbox, Dropdown, DropdownItem, Spinner, DarkThemeToggle} from 'flowbite-react';
+import { Button, TextInput, Label, Checkbox, Dropdown, DropdownItem, Spinner, DarkThemeToggle, Select} from 'flowbite-react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -59,14 +59,23 @@ export default function CreateResource() {
         
         try {
             const name = (document.getElementById('resource-name') as HTMLInputElement).value;
+            const form = (document.getElementById('resource-type') as HTMLSelectElement).value;
+            const manufacturer = (document.getElementById('manufacturer-name') as HTMLInputElement).value;
              const medication = {
                 resourceType: 'Medication',
                 status: 'active',
                 code: {
-                    text: name,   // supplement name
+                    text: name,
+                },
+                manufacturer: {
+                    display: manufacturer,
+                },
+                form: {
+                    text: form,
                 },
                 // add other fields from your form as needed
             };
+
             const response = await fetch('/api/createresource', {
                 method: 'POST',
                 headers: {
@@ -116,6 +125,18 @@ export default function CreateResource() {
                         <TextInput
                             id="resource-name"
                             placeholder="Enter Supplement Name"
+                            required={true}
+                        />
+                        <Select className="mt-4" id="resource-type" required={true}>
+                            <option value="">Select Form</option>
+                            <option value="Tablet">Tablet</option>
+                            <option value="Capsule">Capsule</option>
+                            <option value="Powder">Powder</option>
+                            <option value="Syrup">Syrup</option>
+                        </Select>
+                        <TextInput
+                            id="manufacturer-name"
+                            placeholder="Enter Manufacturer Name"
                             required={true}
                         />
                     </div>

@@ -1,5 +1,6 @@
 'use client';
 
+import MyNav from '@/components/nav';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button, Card, Spinner, Alert, DarkThemeToggle } from 'flowbite-react';
 import { useRouter } from 'next/navigation';
@@ -88,43 +89,7 @@ export default function Users() {
     }
     return (
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-            {/* Header */}
-            <header className="bg-white shadow dark:bg-gray-800">
-                <div className="mx-auto max-w-full px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between items-center">
-                        <div className="flex items-center">
-                            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-                                User Management
-                            </h1>
-                        </div>
-                        <div className="flex items-center space-x-4">
-                            <div className="flex items-center space-x-3">
-                                {user?.picture && (
-                                    <img
-                                        className="h-8 w-8 rounded-full"
-                                        src={user.picture}
-                                        alt={user.name || 'User'}
-                                    />
-                                )}
-                                <span className="text-gray-900 dark:text-white">
-                                    {user?.name || user?.email}
-                                </span>
-                            </div>
-                            <Button 
-                                color="blue" 
-                                onClick={() => router.push('/')}
-                                className="mr-2"
-                            >
-                                Dashboard
-                            </Button>
-                            <Button color="gray" onClick={handleLogout}>
-                                Logout
-                            </Button>
-                            <DarkThemeToggle />
-                        </div>
-                    </div>
-                </div>
-            </header>
+            <MyNav />
 
             {/* Main Content */}
             <main className="mx-auto max-w-2/3 px-4 sm:px-6 lg:px-8 py-8">
