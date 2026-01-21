@@ -7,6 +7,7 @@ export async function PATCH(req: NextRequest) {
     console.log('[auth0_user] Incoming body:', body);
 
     const {
+      picture,
       email,
       username,
       phone,
@@ -15,7 +16,6 @@ export async function PATCH(req: NextRequest) {
       givenname,
       familyname,
       address,
-      pictureurl,
     } = body;
 
     console.log('[auth0_user] Requesting management token for user:', userid);
@@ -49,15 +49,16 @@ export async function PATCH(req: NextRequest) {
     console.log('[auth0_user] Got management token');
 
     const patchBody: any = {
+      picture,
       email,
       given_name: givenname,
       family_name: familyname,
-      picture: pictureurl,
       user_metadata: {
         gender,
         address,
-        display_name: username, 
-      },
+        phone,
+        display_name: username,
+    },
   };
 
     Object.keys(patchBody).forEach((k) => {

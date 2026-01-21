@@ -18,6 +18,12 @@ interface Resource {
     meta: {
         lastUpdated: string;
     }
+    form?: {
+        text: string;
+    };
+    manufacturer?: {
+        display: string;
+    };
 }
 
 export default function Resources() {
@@ -161,6 +167,18 @@ export default function Resources() {
                                             scope="col"
                                             className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
                                         >
+                                            Form
+                                        </th>
+                                         <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                                        >
+                                            Manufacturer
+                                        </th>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                                        >
                                             Last updated
                                         </th>
                                         
@@ -188,6 +206,12 @@ export default function Resources() {
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                                     {resourceData.code.text}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                                    {resourceData.form?.text || 'N/A'}
+                                                </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
+                                                    {resourceData.manufacturer?.display || 'N/A'}
                                                 </td>
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                                     {formatDate(resourceData.meta.lastUpdated)}

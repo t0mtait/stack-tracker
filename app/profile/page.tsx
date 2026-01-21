@@ -6,39 +6,48 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import MyNav from '../../components/nav';
 export default function Dashboard() {
-  const { user, isAuthenticated, isLoading, logout } = useAuth0();
+  const { user, isAuthenticated, isLoading, logout, getAccessTokenSilently } = useAuth0();
   const router = useRouter();
   const [isAdmin, setIsAdmin] = useState(false);
   const [loadingRoles, setLoadingRoles] = useState(true);
 
   const [form, setForm] = useState({
-  picture: user?.picture || '',
-  email: user?.email || '',
-  username: user?.name || '',
-  phone: user?.phone_number || '',
-  userid: user?.sub || '',
-  gender: user?.gender || '',
-  givenname: user?.given_name || '',
-  familyname: user?.family_name || '',
-  address: user?.address || '',
-});
+    picture: '',
+    email: '',
+    username: '',
+    userid: '',
+    givenname: '',
+    familyname: '',
+  })
 
-  useEffect(() => {
-  if (user) {
-    setForm({
-      picture: user.picture || '',
-      email: user.email || '',
-      username: user.name || '',
-      phone: user.phone_number || '',
-      userid: user.sub || '',
-      gender: user.gender || '',
-      givenname: user.given_name || '',
-      familyname: user.family_name || '',
-      address: user.address || '',
-    });
-  }
-}, [user]);
 
+
+useEffect(() => {
+    const loadProfile = async () => {
+      try {
+        const token = await getAccessTokenSilently();
+        const res = await fetch(`https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/userinfo`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const profile = await res.json();
+        console.log('[Dashboard] /userinfo profile:', profile);
+
+        setForm({
+          picture: profile.picture || '',
+          email: profile.email || '',
+          username: profile.nickname ||  '',
+          userid: profile.sub || '',
+          givenname: profile.given_name || '',
+          familyname: profile.family_name || '',
+        });
+      } catch (e) {
+        console.error('Failed to load profile from /userinfo', e);
+      }
+    };
+    if (!isLoading && isAuthenticated) {
+      loadProfile();
+    }
+  }, [isAuthenticated, isLoading, getAccessTokenSilently]);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -99,6 +108,7 @@ export default function Dashboard() {
     
     if (response.ok) {
       alert('Profile updated successfully');
+      window.location.reload(); 
     } else {
       alert('Failed to update profile');
       console.error(data);
@@ -155,14 +165,10 @@ export default function Dashboard() {
                 <TextInput id="username" value={form.username} onChange={e => setForm(f => ({ ...f, username: e.target.value }))} />
                 <Label htmlFor="userid">User ID</Label>
                 <TextInput id="userid" value={form.userid} onChange={e => setForm(f => ({ ...f, userid: e.target.value }))} />
-                <Label htmlFor="gender">Gender</Label>
-                <TextInput id="gender" value={form.gender} onChange={e => setForm(f => ({ ...f, gender: e.target.value }))} />
                 <Label htmlFor="givenname">Given Name</Label>
                 <TextInput id="givenname" value={form.givenname} onChange={e => setForm(f => ({ ...f, givenname: e.target.value }))} />
                 <Label htmlFor="familyname">Family Name</Label>
                 <TextInput id="familyname" value={form.familyname} onChange={e => setForm(f => ({ ...f, familyname: e.target.value }))} />
-                <Label htmlFor="address">Address</Label>
-                <TextInput id="address" value={form.address} onChange={e => setForm(f => ({ ...f, address: e.target.value }))} />
                 <Button className="mt-5 w-full cursor-pointer" type="submit">Save</Button>
               </form>
             </div>

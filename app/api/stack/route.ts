@@ -28,7 +28,9 @@ export async function POST(request: NextRequest) {
       const resource = {
         resourceType: 'MedicationStatement',
         id: id || 'generated-id',
-        subject: 'Reference/Patient/' + fhir_patient_id,
+        subject: {
+          reference: 'Patient/' + fhir_patient_id,
+        },
         status: 'active',
         medicationReference: { reference: 'Medication/' + id },
         dosage: [
@@ -54,6 +56,7 @@ export async function POST(request: NextRequest) {
           },
         ],
       };
+
 
       const fhirUrl = `${process.env.FHIR_BASE_URL}/${resource.resourceType}`;
       const resp = await fetch(fhirUrl, {
@@ -105,6 +108,96 @@ export async function POST(request: NextRequest) {
       {
         success: false,
         error: 'Error creating resource',
+        details: errorMessage,
+      },
+      { status: 500 }
+    );
+  }
+}
+
+
+export async function PATCH(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const {
+      id,
+      dosageValue,
+      dosageUnit,
+      dosesPerWeek,
+    } = body as {
+      id: string;
+      dosageValue: string | number;
+      dosageUnit: string;
+      dosesPerWeek: string | number;
+    };
+
+    const fhirUrl = `${process.env.FHIR_BASE_URL}/MedicationStatement/${id}`;
+    const patchBody = [
+      {
+        op: 'replace',
+        path: '/dosage/0/timing/repeat',
+        value: {
+          frequency: Number(dosesPerWeek) || 0,
+          period: 1,
+          periodUnit: 'wk',
+        },
+      },
+      {
+        op: 'replace',
+        path: '/dosage/0/doseAndRate/0/doseQuantity',
+        value: {
+          value: Number(dosageValue) || 0,
+          unit: dosageUnit || 'units',
+          system: 'http://unitsofmeasure.org',
+          code: dosageUnit || 'g',
+        },
+      },
+    ];
+
+
+    const resp = await fetch(fhirUrl, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json-patch+json',
+        Accept: 'application/fhir+json',
+      },
+      body: JSON.stringify(patchBody),
+    });
+
+
+    const responseBody = await resp.text();
+
+    if (!resp.ok) {
+      console.error('FHIR server error on PATCH:', {
+        status: resp.status,
+        statusText: resp.statusText,
+        body: responseBody,
+        url: fhirUrl,
+      });
+
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Failed to update resource (${resp.status})`,
+          details: responseBody,
+          fhirUrl,
+        },
+        { status: resp.status }
+      );
+    }
+
+    const updated = JSON.parse(responseBody);
+    return NextResponse.json(
+      { success: true, resource: updated },
+      { status: 200 }
+    );
+  } catch (error) {
+    const errorMessage =
+      error instanceof Error ? error.message : 'Unknown error';
+    return NextResponse.json(
+      {
+        success: false,
+        error: 'Error updating resource',
         details: errorMessage,
       },
       { status: 500 }
