@@ -121,7 +121,6 @@ export default function CreateResource() {
 
                 <form className="flex max-w-md flex-col gap-4">
                     <div> 
-                        <Label htmlFor="resource-name">Supplement</Label>
                         <TextInput
                             id="resource-name"
                             placeholder="Enter Supplement Name"
@@ -135,6 +134,7 @@ export default function CreateResource() {
                             <option value="Syrup">Syrup</option>
                         </Select>
                         <TextInput
+                            className="mt-4"
                             id="manufacturer-name"
                             placeholder="Enter Manufacturer Name"
                             required={true}

@@ -1,5 +1,6 @@
 'use client';
 
+import EditStackItem from '@/components/editStackItem';
 import { useAuth0 } from '@auth0/auth0-react';
 import { Button, Card, Spinner, Alert, DarkThemeToggle, Table, TableHead, TableHeadCell, TableBody, TableRow, TableCell } from 'flowbite-react';
 import { useRouter } from 'next/navigation';
@@ -127,10 +128,15 @@ export default function Stack() {
               <TableCell>
                 <div className="flex flex-row gap-3">
                   <a href={`http://localhost:8080/fhir/MedicationStatement/${medication.id}`} className="cursor-pointer text-blue-600 underline">View</a>
+                  <EditStackItem 
+                    resourceId={medication.id.toString()}
+                    supplementName={medicationNames[medication.id] ?? 'Loading...'}
+                  />
                   <a className="cursor-pointer text-red-600 underline" onClick={ () => {
                   router.push(`/stack/delete/${medication.id}`);
                 }}>Delete</a>
                 </div>
+                
                   
                   
               </TableCell>        
