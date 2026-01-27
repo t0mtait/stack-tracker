@@ -10,12 +10,9 @@ export async function PATCH(req: NextRequest) {
       picture,
       email,
       username,
-      phone,
       userid,
-      gender,
       givenname,
       familyname,
-      address,
     } = body;
 
     console.log('[auth0_user] Requesting management token for user:', userid);
@@ -26,8 +23,8 @@ export async function PATCH(req: NextRequest) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          client_id: process.env.NEXT_PUBLIC_AUTH0_CLIENT_ID,
-          client_secret: process.env.AUTH0_CLIENT_SECRET,
+          client_id: process.env.NEXT_PUBLIC_M2M_AUTH0_CLIENT_ID,
+          client_secret: process.env.M2M_AUTH0_CLIENT_SECRET,
           audience: `https://${process.env.NEXT_PUBLIC_AUTH0_DOMAIN}/api/v2/`,
           grant_type: 'client_credentials',
         }),
@@ -53,12 +50,7 @@ export async function PATCH(req: NextRequest) {
       email,
       given_name: givenname,
       family_name: familyname,
-      user_metadata: {
-        gender,
-        address,
-        phone,
-        display_name: username,
-    },
+      nickname: username,
   };
 
     Object.keys(patchBody).forEach((k) => {

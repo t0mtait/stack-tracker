@@ -167,6 +167,12 @@ export default function Users() {
                                         >
                                             Last modified
                                         </th>
+                                        <th
+                                            scope="col"
+                                            className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider"
+                                        >
+                                            Actions
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
@@ -210,6 +216,16 @@ export default function Users() {
                                                 <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white">
                                                     {formatDate(userData.updated_at)}
                                                 </td>
+                                                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                    <a
+                                                            href={`https://manage.auth0.com/dashboard/us/${process.env.NEXT_PUBLIC_AUTH0_TENANT}/users`}
+                                                            rel="noopener noreferrer"
+                                                            className="cursor-pointer text-blue-600 underline"
+                                                        >
+                                                        View
+                                                        </a>
+                                                </td>
+                                                    
                                             </tr>
                                         ))
                                     )}
